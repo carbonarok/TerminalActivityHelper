@@ -1,4 +1,5 @@
 import AppKit
+import UserNotifications
 
 @MainActor
 final class StatusBarController {
@@ -29,6 +30,25 @@ final class StatusBarController {
         menu.addItem(quitItem)
 
         statusItem.menu = menu
+    }
+
+    func showNotification(title: String, body: String) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = UNNotificationSound.default
+
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: nil  // deliver immediately
+        )
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Notification error: \(error)")
+            }
+        }
     }
 
     func update(with runs: [RunState]) {
@@ -72,4 +92,3 @@ final class StatusBarController {
         NSApplication.shared.terminate(nil)
     }
 }
-

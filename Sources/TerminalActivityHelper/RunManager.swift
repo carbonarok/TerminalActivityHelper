@@ -1,4 +1,3 @@
-
 import Foundation
 
 @MainActor
@@ -6,7 +5,7 @@ final class RunManager {
     static let shared = RunManager()
     private init() {}
 
-    private(set) var runs: [String: RunState] = [:]   // runID -> RunState
+    private(set) var runs: [String: RunState] = [:]  // runID -> RunState
 
     func startRun(runID: String, title: String, command: String) {
         let state = RunState(
@@ -31,6 +30,6 @@ final class RunManager {
         runs[runID] = state
 
         StatusBarController.shared.update(with: Array(runs.values))
+        StatusBarController.shared.showNotification(title: state.title, body: state.command)
     }
 }
-
